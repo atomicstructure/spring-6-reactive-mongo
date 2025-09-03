@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class BeerDTO {
 
-    private Integer id;
+    private String id;
 
     @NotBlank
     @Size(min = 3, max = 255)
