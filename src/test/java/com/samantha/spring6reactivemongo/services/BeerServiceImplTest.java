@@ -11,8 +11,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static java.lang.Thread.sleep;
+import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -33,17 +35,16 @@ class BeerServiceImplTest {
     }
     @Test
     void saveBeer(){
+        AtomicBoolean atomicBoolean = new AtomicBoolean(false);
+
         Mono<BeerDTO> savedMono = beerService.saveBeer(Mono.just(beerDTO));
 
         savedMono.subscribe(savedDto -> {
             System.out.println(savedDto.getId());
+            atomicBoolean.set(true);
         });
 
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        await().untilTrue(atomicBoolean);
     }
 
     public static Beer getTestBeer() {
