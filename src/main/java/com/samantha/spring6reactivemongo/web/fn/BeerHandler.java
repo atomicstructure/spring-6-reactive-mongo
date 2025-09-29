@@ -1,6 +1,7 @@
 package com.samantha.spring6reactivemongo.web.fn;
 
 
+import com.mongodb.internal.connection.Server;
 import com.samantha.spring6reactivemongo.model.BeerDTO;
 import com.samantha.spring6reactivemongo.services.BeerService;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,9 @@ import reactor.core.publisher.Mono;
 public class BeerHandler {
     private final BeerService beerService;
 
+    public Mono<ServerResponse> getBeerById(ServerRequest serverRequest) {
+        return ServerResponse.ok().body(beerService.getById(serverRequest.pathVariable("beerId")), BeerDTO.class);
+    }
     public Mono<ServerResponse> listBeers(ServerRequest serverRequest) {
         return ServerResponse.ok()
                 .body(beerService.listBeers(), BeerDTO.class);
