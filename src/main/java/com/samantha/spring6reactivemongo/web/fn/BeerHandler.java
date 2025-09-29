@@ -18,6 +18,13 @@ import java.net.URI;
 public class BeerHandler {
     private final BeerService beerService;
 
+    public Mono<ServerResponse> UpdateBeerById(ServerRequest serverRequest) {
+        return serverRequest.bodyToMono(BeerDTO.class)
+                .flatMap(beerDTO -> beerService
+                        .updateBeer(serverRequest.pathVariable("beerId"), beerDTO))
+                .flatMap(savedDto -> ServerResponse.noContent().build());
+    }
+
     public Mono<ServerResponse> createBeer(ServerRequest serverRequest) {
         return beerService.saveBeer(serverRequest.bodyToMono(BeerDTO.class))
                 .flatMap(beerDTO -> ServerResponse
