@@ -1,6 +1,5 @@
 package com.samantha.spring6reactivemongo.web.fn;
 
-import com.samantha.spring6reactivemongo.domain.Beer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
