@@ -19,6 +19,11 @@ import java.net.URI;
 public class BeerHandler {
     private final BeerService beerService;
 
+    public Mono<ServerResponse> deleteById(ServerRequest serverRequest) {
+        return beerService.deleteBeerById(serverRequest.pathVariable("beerId"))
+                .then(ServerResponse.noContent().build());
+    }
+
     public Mono<ServerResponse> PatchById(ServerRequest serverRequest) {
         return serverRequest.bodyToMono(BeerDTO.class)
                 .flatMap(beerDTO -> beerService
