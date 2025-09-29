@@ -11,12 +11,20 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
 
+import java.awt.event.MouseMotionAdapter;
 import java.net.URI;
 
 @Component
 @RequiredArgsConstructor
 public class BeerHandler {
     private final BeerService beerService;
+
+    public Mono<ServerResponse> PatchById(ServerRequest serverRequest) {
+        return serverRequest.bodyToMono(BeerDTO.class)
+                .flatMap(beerDTO -> beerService
+                        .patchBeer(serverRequest.pathVariable("beerId"), beerDTO))
+                .flatMap(savedDto -> ServerResponse.noContent().build());
+    }
 
     public Mono<ServerResponse> UpdateBeerById(ServerRequest serverRequest) {
         return serverRequest.bodyToMono(BeerDTO.class)
