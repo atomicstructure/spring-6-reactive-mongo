@@ -14,20 +14,14 @@ import org.springframework.security.web.server.util.matcher.PathPatternParserSer
 public class SpringSecConfig {
 
     @Bean
-    @Order(1)
-    public SecurityWebFilterChain actuatorSecurityFilterChain(ServerHttpSecurity http) throws Exception {
-        http.securityMatcher(new PathPatternParserServerWebExchangeMatcher("/actuator/**"))
-                .authorizeExchange(authorizeExchangeSpec -> authorizeExchangeSpec.anyExchange().permitAll());
-        return http.build();
-    }
-    @Bean
-    @Order(2)
-    SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http){
+    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
         http
-                .authorizeExchange(authorizeExchangeSpec -> authorizeExchangeSpec.anyExchange().authenticated())
-                .oauth2ResourceServer(oAuth2ResourceServerSpec -> oAuth2ResourceServerSpec.jwt(Customizer.withDefaults()))
+                .authorizeExchange(exchanges -> exchanges
+                        .pathMatchers("/actuator/**").permitAll()
+                        .anyExchange().authenticated()
+                )
+                .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
                 .csrf(ServerHttpSecurity.CsrfSpec::disable);
-
         return http.build();
     }
 }
